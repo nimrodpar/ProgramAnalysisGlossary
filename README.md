@@ -114,12 +114,12 @@ Arriving at `L3`, to correctly know which expressions are available and need not
 
   ![Must Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/8.png)
   
-## Forward-Analysis
+## Forward Analysis
 
 * An analysis where the abstract state flows forward
   * The state at each program point is derived from the states of the **preceding** program points
 
-  ![Forward-Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/12.png)
+  ![Forward Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/12.png)
   
 _Speaker Notes:_
 
@@ -133,7 +133,7 @@ _Speaker Notes:_
 
 So that state from `L1` is taken as the initial state for `L2` (i.e., `in(L2) = L1`), and the operation `x=1` at `L2` is accounted for (the semantics of `L2` i.e., [| `x = 1` |]) and we get the resulting state for `L2` (i.e., `out(L2) = {x =1, y = nothing}`.
 
-## Backward-Analysis
+## Backward Analysis
 * An analysis where the abstract state flows backwards
   * The state at each program point is derived from the states of the **succeeding** program points
 * Example: Live Variables analysis
@@ -145,7 +145,7 @@ _Speaker Notes:_
 
 This analysis starts the end of the program. It identifies that `L4` uses `y`, so `y` is live at `L4`.
 
-  ![Backward-Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/15.png)
+  ![Backward Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/15.png)
   
 _Speaker Notes:_
 
@@ -153,15 +153,52 @@ To determine which variables are live (i.e., required and can’t be freed) at `
 
 Note that we already know that `y` can be freed after `L3`.
 
-  ![Backward-Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/16.png)
+  ![Backward Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/16.png)
   
 _Speaker Notes:_
 
 The final result of the analysis.
 
+## Flow-Sensitive Analysis
 
+* An analysis that takes the order of instructions into account.
 
+  ![Flow-Sensitive Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/17.png)
+  
+_Speaker Notes:_
 
+This (concise) slide shows the state for the exit point of f() (a.k.a. post-condition).
+
+On the left we have a result for a flow-insensitive analysis where instruction ordering is ignored. In this sort of analysis, basically everything that happens everywhere in the program (w.r.t. Each variable) is tracked, and no overwriting is done. Therefore we get the state on the left tracking both assignments to `x`.
+
+On the right we have a flow-sensitive analysis which tracks instruction ordering. The assignment of `x = 2` therefore overwrite the previous assignment in the state, resulting in the more precise `{x=2}` state at program exit.
+
+Why would anyone use a flow-insensitive algorithm? They are simpler to specify, and can be faster. Therefore they are useful in some types of analysis where the precision gap may be small (e.g., https://www.cs.colorado.edu/~bec/papers/sas11-ptaprecision.pdf).
+
+## Path-Sensitive Analysis
+
+* An analysis that takes branch conditions into account.
+
+  ![Path-Sensitive Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/18.png)
+  
+_Speaker Notes:_
+
+As before, the state of the left shows the result of a path-insensitive analysis at the exit point of `f()`. The `x > 0` branch condition is unaccounted for.
+
+The path-sensitive state on the right shows the result at the exit point for `f()`, where path conditions, i.e., the branch condition and its negation, are taken into account. This result in a bigger and more informative state (but also more expensive).
+
+## Context-Sensitive / Interprocedural Analysis
+
+* An analysis that takes the calling context into account.
+  * a.k.a inter-procedural analysis
+
+  ![Interprocedural Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/19.png)
+  
+_Speaker Notes:_
+
+In the context-insensitive analysis we analyze all functions once independently of calling context (we don’t care where the function was called from and what was the state at the point of invocation). Thus `f()` will be analyzed once, with no context, forcing the analysis to assume that input variable `x` can hold any possible value (a.k.a top `T`). Incrementing `T` by 1 results in `T`, which will be the return value of `f()`. This will be assigned to `y` in `L1`, resulting in the very imprecise abstract state on the left.
+
+A context-sensitive analysis, will maintain the calling context, i.e., what values are possible for `x` at the callsite to `f()`. The analysis will carry the `{ y = 0 }` context to `f()` and plug that to the input argument `x`, resulting in a `{ x = 1 }` state for `f()` which in turn will be assigned to `y` at `L1`, resulting with the state on the right. This may remind you of inlining performed by compilers, as it indeed operates in a similar way.
 
 
 
