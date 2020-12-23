@@ -32,7 +32,9 @@ _These apply to (almost) all analyses._
 * A mapping from each location in the program to an abstract state describing some trait for program variables.
   * Example traits: Possible range of values (a.k.a interval), Which variables may still be used later in the program (a.k.a live variables), Which computed expressions are still valid (a.k.a available expressions), etc. 
   
-  ![A Program Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/4.png)
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/4.png" width='80%'/>
+</p>
   
 _Speaker Notes:_
 
@@ -42,7 +44,9 @@ For the sake of simplicity, we define a very basic notion of a program analysis.
 
 Note: some analysis treat uninitialized variables as having *all possible values* (since this may be the case for some languages like C), which is usually denoted as `x = ⟙` (also called “top”)
 
-  ![A Program Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/5.png)
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/5.png" width='80%'/>
+</p>
   
 _Speaker Notes:_
 
@@ -61,7 +65,9 @@ Abstract domains in program analysis have many rules that are required for corre
 * An operation for...joining abstract states flowing from multiple paths.
 * Also called a "May Analysis"
 
-  ![The Join Operation ⨆](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/6.png)
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/6.png" width='50%'/>
+</p>
   
 _Speaker Notes:_
 
@@ -69,7 +75,9 @@ So, what do we do in the case of the pos() function? What is the abstract state 
 
 Since we want to cover all possible values of variable `x` (this is also called “over-approximating”), we need to account for the values flowing into `L3`. The values are determined by the two branches of the if statement. So, we somehow need to account for the states that we have for `L1` and `L2`.
 
-  ![The Join Operation ⨆](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/7.png)
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/7.png" width='65%'/>
+</p>
   
 _Speaker Notes:_
 
