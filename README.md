@@ -1,12 +1,12 @@
 # Program Analysis Glosarry
 
-[I](https://nimrodpar.github.io/) created this glossary due to a recent program analysis exploration task. I found myself struggling to keep up with the jargon and all the (many) different kinds of analyses.
+[I](https://nimrodpar.github.io/) created this glossary due to a recent program analysis exploration task where I found myself struggling to keep up with the jargon and all the (many) different kinds of analyses.
 
 <h1 align="center">
   <a href='https://docs.google.com/presentation/d/1DkInjfdAT6BGIMI2xHavxGgLqrV-seBDvNx0gUgU-6c/edit?usp=sharing'> -->Slides<---</a>
 </h1>
 
-The slides were created first, but I'm in the process of transcribing them directly to the readme here.
+A transcribed version of the slides in Github Markdown format follows.
 
 ---
 
@@ -42,7 +42,7 @@ For the sake of simplicity, we define a very basic notion of a program analysis.
 
 `x = nothing` means that x is not initialized so we don’t have any valid possible value for it. Another notation for this is `x = ⟂` (also called ‘bottom’).
 
-Note: some analysis treat uninitialized variables as having *all possible values* (since this may be the case for some languages like C), which is usually denoted as `x = ⟙` (also called “top”)
+Note: some analysis treat uninitialized variables as having *all possible values* (since this may be the case for some languages like C), which is usually denoted as `x = ⟙` (also called “top”).
 
 <p align="center">
   <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/5.png" width='80%'/>
@@ -63,7 +63,7 @@ Abstract domains in program analysis have many rules that are required for corre
 ## Definition: The Join Operation ⨆
 
 * An operation for...joining abstract states flowing from multiple paths.
-* Also called a "May Analysis"
+* Also called a "May Analysis".
 
 <p align="center">
   <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/6.png" width='50%'/>
@@ -76,12 +76,12 @@ So, what do we do in the case of the pos() function? What is the abstract state 
 Since we want to cover all possible values of variable `x` (this is also called “over-approximating”), we need to account for the values flowing into `L3`. The values are determined by the two branches of the if statement. So, we somehow need to account for the states that we have for `L1` and `L2`.
 
 <p align="center">
-  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/7.png" width='65%'/>
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/7.png" width='70%'/>
 </p>
   
 _Speaker Notes:_
 
-The operation for accounting for all states flowing into a program location is called a Join operation (denoted ⨆)
+The operation for accounting for all states flowing into a program location is called a Join operation (denoted ⨆).
 
 Basically the operation means “the value for `x` in `L3` can be either the value of `x` in `L1` or the value of `x` in `L2`”. 
 
@@ -92,9 +92,11 @@ This sort of compromise (also called abstraction) is needed for efficiency. One 
 ## Definition: The Meet Operation ⊓
 
 * Merging abstract states flowing from multiple paths while keeping facts that are *true on all paths*.
-* Also called a "Must Analysis"
+* Also called a "Must Analysis".
 
-  ![The Meet Operation ⊓](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/8.png)
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/8.png" width='60%'/>
+</p>
 
 _Speaker Notes:_
 
@@ -114,18 +116,23 @@ Arriving at `L3`, to correctly know which expressions are available and need not
 
 * (as seen before) an over-approximating analysis that uses the join ⨆ operation to merge states flowing from multiple paths.
 
-  ![May Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/7.png)
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/7.png" width='70%'/>
+</p>
+
 
 ## Must Analysis
 
-* (as seen before) an under-approximating analysis that uses the meet ⊓ operation to merge states flowing from multiple paths
+* (as seen before) an under-approximating analysis that uses the meet ⊓ operation to merge states flowing from multiple paths.
 
-  ![Must Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/8.png)
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/8.png" width='60%'/>
+</p>
   
 ## Forward Analysis
 
-* An analysis where the abstract state flows forward
-  * The state at each program point is derived from the states of the **preceding** program points
+* An analysis where the abstract state flows forward.
+  * The state at each program point is derived from the states of the **preceding** program points.
 
   ![Forward Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/12.png)
   
@@ -135,25 +142,31 @@ You may not have noticed, but the way states at each location were computed is b
 
 This sort of analysis, where you use the states for (direct) previous lines, is called a forward analysis. Most analysis are forward ones, including what we saw so far.
 
-  ![Forward-Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/13.png)
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/13.png" width='85%'/>
+</p>
   
 _Speaker Notes:_
 
 So that state from `L1` is taken as the initial state for `L2` (i.e., `in(L2) = L1`), and the operation `x=1` at `L2` is accounted for (the semantics of `L2` i.e., [| `x = 1` |]) and we get the resulting state for `L2` (i.e., `out(L2) = {x =1, y = nothing}`.
 
 ## Backward Analysis
-* An analysis where the abstract state flows backwards
-  * The state at each program point is derived from the states of the **succeeding** program points
-* Example: Live Variables analysis
-  * An analysis used by compilers to determine which variables are no longer needed and can be freed
+* An analysis where the abstract state flows backwards.
+  * The state at each program point is derived from the states of the **succeeding** program points.
+* Example: Live Variables analysis.
+  * An analysis used by compilers to determine which variables are no longer needed and can be freed.
 
-  ![Backward-Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/14.png)
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/14.png" width='50%'/>
+</p>
   
 _Speaker Notes:_
 
 This analysis starts the end of the program. It identifies that `L4` uses `y`, so `y` is live at `L4`.
 
-  ![Backward Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/15.png)
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/15.png" width='80%'/>
+</p>
   
 _Speaker Notes:_
 
@@ -161,8 +174,10 @@ To determine which variables are live (i.e., required and can’t be freed) at `
 
 Note that we already know that `y` can be freed after `L3`.
 
-  ![Backward Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/16.png)
-  
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/16.png" width='55%'/>
+</p>
+
 _Speaker Notes:_
 
 The final result of the analysis.
@@ -198,7 +213,7 @@ The path-sensitive state on the right shows the result at the exit point for `f(
 ## Context-Sensitive / Interprocedural Analysis
 
 * An analysis that takes the calling context into account.
-  * a.k.a inter-procedural analysis
+  * a.k.a inter-procedural analysis.
 
   ![Interprocedural Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/19.png)
   
@@ -207,6 +222,88 @@ _Speaker Notes:_
 In the context-insensitive analysis we analyze all functions once independently of calling context (we don’t care where the function was called from and what was the state at the point of invocation). Thus `f()` will be analyzed once, with no context, forcing the analysis to assume that input variable `x` can hold any possible value (a.k.a top `T`). Incrementing `T` by 1 results in `T`, which will be the return value of `f()`. This will be assigned to `y` in `L1`, resulting in the very imprecise abstract state on the left.
 
 A context-sensitive analysis, will maintain the calling context, i.e., what values are possible for `x` at the callsite to `f()`. The analysis will carry the `{ y = 0 }` context to `f()` and plug that to the input argument `x`, resulting in a `{ x = 1 }` state for `f()` which in turn will be assigned to `y` at `L1`, resulting with the state on the right. This may remind you of inlining performed by compilers, as it indeed operates in a similar way.
+
+## k-CFA
+
+* k-CFA is a property of context sensitive analysis.
+  * CFA stands for Control Flow Analysis.
+* It basically describes the size of the context maintained throughout the analysis.
+  * For interprocedural callsite-based analysis, a 1-CFA analysis maintains the context of the caller, when starting the analysis of a function (the callee).
+    * The context is the state of the caller, at the point where the function was invoked.
+  * 2-CFA includes the state of the caller, and the caller of that caller.
+  * Etc.
+ 
+Note: CFA is a misnomer (since control relates to branching in general and not necessarily function calls), but it stuck.
+
+## Call Site Sensitive Analysis 
+
+* A kind of a context-sensitive analysis that retains context by call sites.
+
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/21.png" width='75%'/>
+</p>
+
+_Speaker Notes:_
+
+This is one kind of a context sensitive analysis. 
+
+The analysis remembers the (chain of) call-site(s) from which the currently analyzed function arrived from, and carries context, in the form of program state, from that call location to the entry point of the program.
+
+The program state captioned as “1-CFA” is the result of a callsite sensitive analysis with a callsite chain of length 1. The analysis knows that it arrived at `L1` in `hey()` from `L2` in `foo()`, and therefore uses what is known about the state of `foo()` at `L2` for the input variable `i`. Since not much is known (`x` in an argument to `foo()` and  is passed directly to `hey()`), the state maintains that the value of result is the value of `x` from `L2`, plus 1.
+
+The state captioned as “2-CFA” is the result of a 2-callsite-length chain analysis. This means that the analysis tracks the state of the calling function, as well as the state of the caller to the calling function. In the example, the state shown is for `hey()` at location `L1`, that was called from `L2` (in `foo()`), which in turn was called from `L3` (in `goo()`). 
+
+As you may imagine, the longer the call chain for the k-CFA analysis, the (exponentially) more expensive it is. Once of the defining papers for creating an efficient interprocedural analysis is Precise interprocedural dataflow analysis via graph reachability.
+
+## Object Sensitive Analysis
+
+* A kind of a context-sensitive analysis that retains context by objects/allocation-sites.
+
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/22.png" width='75%'/>
+</p>
+
+_Speaker Notes:_
+
+A different approach for maintaining context in object oriented code is object sensitivity. Instead of maintaining a chain of states for callsites, we maintain a chain of calling objects, and their state. 
+
+Objects are almost almost always identified by Allocation Sites (abbreviated as AS).
+
+In the example we have two objects of type `A`, identified by their two allocation site `AS1` and `AS2`. The state shown on the left is the exit state for `foo()`. You can see that the state is composed of 2 disjunctions: one for when the object is `a1` allocated at `AS1`, and one for `a2` from `AS2`.
+
+A 2-CFA analysis for object sensitive would maintain a chain of two calling objects (for instance if we had class `C` that allocated `B` objects and invoked `bar()`).
+
+## Hybrid Callsite-Object Sensitive Analysis
+
+* Joins both worlds, more precise, more expensive.
+
+<p align="center">
+  <img src="https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/23.png" width='85%'/>
+</p>
+
+_Speaker Notes:_
+
+Note: Object sensitivity may be expressed via callsite sensitivity by treating the object as an argument for the invoked call.
+
+## Field-Sensitive Analysis
+
+* An analysis that distinguishes different fields of an object.
+
+  ![Hybrid Callsite-Object Sensitive Analysis](https://github.com/nimrodpar/ProgramAnalysisGlossary/blob/main/Slides/24.png)
+
+_Speaker Notes:_
+
+It may be hard to imagine, but some analysis are able to scale better (be faster) by treating all the fields in some object as the same field. This is called field-insensitivity.
+
+The state on the left is a result of a flow-insensitive,  field-insensitive analysis. All the fields for the objects are indistinguishable and marked as `*`. The sub-state pertaining to `AS1` comes from the `a.x = 1` assignment, and the `AS2` substate comes from `a.y = 2`.
+
+The state on the right is both flow and field sensitive.
+
+
+
+
+
+
 
 
 
